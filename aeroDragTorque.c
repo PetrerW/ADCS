@@ -1,8 +1,35 @@
-double aeroDragTorque(double r_eci, double v_eci, double* q, double face, double R_z) //I don't know global value R_z so i'll set this as parameter
+#include "Mathematics.h"
+//ECI - Earth Centered Inertial
+double aeroDragTorque(matrix r_eci, double v_eci, matrix q, double face, double R_z) //I don't know global value R_z so i'll set this as parameter
 {
 	double w_ez = 7.2921158553e-5; //[rad/s]
+	matrix w_e;
+	w_e.q[0] = (double* )malloc(sizeof(double) * 3); 
+	w_e.q[0][0] = w_ez * 1;	//First row, first position
+	w_e.q[0][1] = 0;	//First row, second position
+	w_e.q[0][2] = 0;	//First row, third position
+
+	//w_e looks now like: [0 0 1]' (transposed)
+
 	double w_e[3] = { w_ez * 1, 0, 0 }; //earth rate vector in eci
-	double vi_rel = v_eci - skew(w_e) * r_eci; //relative satellite velocity to the atmosphere in eci [km/s]
+	matrix *A;
+	A->length = 3;
+	A->width = 3;
+	*A = *skew(w_e);
+	matrix vi_rel;// = v_eci - (*A) * r_eci; //relative satellite velocity to the atmosphere in eci [km/s]
+
+	vi_rel.q = (double **)malloc(3 * sizeof(double));
+	int i;
+	for (i = 0; i < 3; i++) //Multiplying matrice 3x3 (A) and vector (1x3)
+	{
+		vi_rel.q[i][0] = (A->q[i][0] + A->q[i][1] + A->q[i][2]) * (w_e.q[i][0]);
+	}
+	vi_rel.length = 3;
+	vi_rel.width = 1;
+	//vi_rel: [x y z]'
+	
+	//GO ON HERE finish A_i2s and q2m
+
 	double A_i2s = q2m(q);
 	double vs_rel = A_i2s * vi_rel; // relative velocity in satellite frame[km / s]
 
