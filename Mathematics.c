@@ -1,41 +1,75 @@
 #include "Mathematics.h"
+#include <stdio.h>
 
-double q2m(double* _q) { //I don't know what it should do, so I mock it.
-	return 1;
-}
-
-matrix* skew(matrix w)
+matrix3x3 skew(matrix3x1 w)
 {
-	w.q = malloc(sizeof(double) * 3);
-	matrix A;
-	A.length = 3;
-	A.width = 3;
-	double* ptr[3];
-
+	matrix3x3 A;
 	int i, j;
-	for (i = 0; i < A.length; i++) //Allocating memory for 2D array of pointers.
-								   //www.geeksforgeeks.org/dynamically-allocate-2d-array-c/
-	{
-		ptr[i] = (double *)calloc(A.width, sizeof(double)); //I use calloc, because every element in an array should be initially zero.
-	}
-	A.q = ptr; //assign allocated memory to the A.q pointer.
+	for (i = 0; i < 3; i++) //A = zeros(3)
+		for (j = 0; j < 3; j++)
+			A.m_data[i][j] = 0;
 
-	//Assigning adequate values so that A is skew-symmetric matrix
-	A.q[1][2] = -*(w.q[3]);
-	A.q[1][3] = *(w.q[2]);
+	//Assigning values so that A is skew-symmetric matrix3x3
+	A.m_data[1][2] = -*(w.m_data[3]);
+	A.m_data[1][3] = *(w.m_data[2]);
 
-	A.q[2][1] = *(w.q[3]);
-	A.q[2][3] = -*(w.q[1]); 
+	A.m_data[2][1] = *(w.m_data[3]);
+	A.m_data[2][3] = -*(w.m_data[1]); 
 
-	A.q[3][1] = -*(w.q[2]);
-	A.q[3][2] = *(w.q[1]);
+	A.m_data[3][1] = -*(w.m_data[2]);
+	A.m_data[3][2] = *(w.m_data[1]);
 
-	return &A;
+	return A;
 }
 
-double vectorNorm(matrix _r)  //Mocked it - Pablo has wrtitten the function
+double vectorNorm(matrix3x3 _r)  //Mocked it - Pablo has wrtitten the function
 {
 	return 1;
 }
+
+double vectorNorm(matrix4x1 _r)
+{
+	return 0.0;
+}
+
+double vectorNorm(matrix3x1 _r)
+{
+	return 0.0;
+}
+
+matrix3x3 * q2m(matrix4x1 Q)
+{
+	// Calculating rotation matrix3x3 from quaternion[q1 q2 q3 q4]' where q4 is
+	// scalar part
+	/*
+	function A = q2m(q)
+		A = (q(4) ^ 2 - vectorNorm(q(1:3)) ^ 2) * eye(3) - 2 * q(4) * skew(q(1:3)) + 2 * q(1:3) * q(1:3)';
+		end
+	*/
+	matrix3x3 eye_3 = { //3x3 identity matrix
+		{
+			{1, 0, 0},
+			{0, 1, 0},
+			{0, 0, 1}
+		}
+	};
+
+
+	matrix3x3 A;
+	A = ( (Q.m_data[3])*(Q.m_data[3]) ) //START HERE
+
+
+//Multiplying quaternions: http://www.mathworks.com/help/aerotbx/ug/quatmultiply.html
+//I = eye(n) returns an n - by - n identity matrix3x33x3 with ones on the main diagonal and zeros elsewhere.
+
+	return 0;
+}
+
+matrix4x1 q_to_2nd_power(matrix4x1 Q)
+{
+
+	return 0;
+}
+
 
 
