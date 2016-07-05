@@ -106,11 +106,6 @@ matrix3x3 q2m(matrix4x1 Q)
 	return A;
 }
 
-matrix4x1 q_to_2nd_power(matrix4x1 Q)
-{
-
-	return 0;
-}
 
 
 
