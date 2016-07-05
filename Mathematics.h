@@ -18,6 +18,5 @@ double vectorNorm3x3(matrix3x3 _r);
 double vectorNorm4x1(matrix4x1 _r);
 double vectorNorm3x1(matrix3x1 _r);
 matrix3x3 q2m(matrix4x1 Q);
-matrix4x1 q_to_2nd_power(matrix4x1 Q);
 
 
