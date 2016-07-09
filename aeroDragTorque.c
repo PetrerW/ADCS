@@ -1,39 +1,34 @@
 #include "Mathematics.h"
+#include <stdio.h>
+#include <math.h>
 //ECI - Earth Centered Inertial
-double aeroDragTorque(matrix r_eci, double v_eci, matrix q, double face, double R_z) //I don't know global value R_z so i'll set this as parameter
+double aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, double face, double R_z) //I don't know global value R_z so i'll set this as parameter
 {
-	double w_ez = 7.2921158553e-5; //[rad/s]
-	matrix w_e;
-	w_e.q[0] = (double* )malloc(sizeof(double) * 3); 
-	w_e.q[0][0] = w_ez * 1;	//First row, first position
-	w_e.q[0][1] = 0;	//First row, second position
-	w_e.q[0][2] = 0;	//First row, third position
-
-	//w_e looks now like: [0 0 1]' (transposed)
-
-	double w_e[3] = { w_ez * 1, 0, 0 }; //earth rate vector in eci
-	matrix *A;
-	A->length = 3;
-	A->width = 3;
-	*A = *skew(w_e);
-	matrix vi_rel;// = v_eci - (*A) * r_eci; //relative satellite velocity to the atmosphere in eci [km/s]
-
-	vi_rel.q = (double **)malloc(3 * sizeof(double));
 	int i;
-	for (i = 0; i < 3; i++) //Multiplying matrice 3x3 (A) and vector (1x3)
-	{
-		vi_rel.q[i][0] = (A->q[i][0] + A->q[i][1] + A->q[i][2]) * (w_e.q[i][0]);
+	double w_ez = 7.2921158553e-5; //[rad/s]
+	matrix1x3 w_e = { // earth rate vector in eci
+		{ 0, 0, w_ez }
+	}; 	//w_e looks like: [0 0 w_ez]' (transposed)
+
+	matrix3x3 A = skew1x3(w_e);
+
+	matrix1x3 vi_rel, second_component; //relative satellite velocity to the atmosphere in eci [km/s]
+											//Second component of the vi_rel is: skew(w_e) * r_eci;
+											//whole equation is: vi_rel = v_eci - skew(w_e) * r_eci; 
+
+	matrix3x3 A_i2s = q2m(q);
+	matrix1x3 vs_rel;
+
+	for (i = 0; i < 3; i++)
+	{//Calculating the second component (multiplying matrix A (3x3) by r_eci (1x3) gives 1x3 too
+		second_component.m_data[i] = A.m_data[i][0] * r_eci.m_data[0] + A.m_data[i][1] * r_eci.m_data[1] + A.m_data[i][2] * r_eci.m_data[2];
+		vi_rel.m_data[i] = v_eci.m_data[i] - second_component.m_data[i];
+		//calculating vs_rel 1x3 vector. 
+		//relative velocity in satellite frame [km/s]
+		vs_rel.m_data[i] = A_i2s.m_data[i][0] * vi_rel.m_data[0] + A_i2s.m_data[i][1] * vi_rel.m_data[1] + A_i2s.m_data[i][2] * vi_rel.m_data[2];
 	}
-	vi_rel.length = 3;
-	vi_rel.width = 1;
-	//vi_rel: [x y z]'
-	
-	//GO ON HERE finish A_i2s and q2m
 
-	double A_i2s = q2m(q);
-	double vs_rel = A_i2s * vi_rel; // relative velocity in satellite frame[km / s]
-
-	double alt = vectorNorm(r_eci) - R_z; //approx altitude above spherical earth[km]
+	double alt = vectorNorm1x3(r_eci) - R_z; //approx altitude above spherical earth[km]
 
 	double ro0, H, h0;
 		if (alt >= 450 && alt < 500)
@@ -71,5 +66,13 @@ double aeroDragTorque(matrix r_eci, double v_eci, matrix q, double face, double 
 
 		double aero_torque = 0;
 
+
+		//GO ON HERE
+		//GO ON HERE
+		//GO ON HERE
+		//GO ON HERE
+		//GO ON HERE
+
+		return 0.0;
 }
 
