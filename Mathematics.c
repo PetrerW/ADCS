@@ -124,6 +124,81 @@ matrix3x3 q2m(matrix4x1 Q)
 	return A;
 }
 
+matrix4x1 m2q(matrix3x3 A) //% Extract quaternion from attitude matrix
+//% Avoid numerical errors by choosing the quaternion with the greatest
+//% norm
+{
+	double trace_A = A.m_data[0][0] + A.m_data[1][1] + A.m_data[2][2]; 
+	//%trace(A) ist the sum of diagonal elements of A matrix.
+	matrix4x1 q;
+	matrix4x1 a = 
+	{
+		{
+			trace_A, A.m_data[0][0], A.m_data[1][1], A.m_data[2][2]
+		}
+	};
+	matrix4x1 a_sorted = a;
+	quicksort(a_sorted.m_data, 0, 3); //Sorting the table
+	double max_value = a_sorted.m_data[3]; //Assign the maximal value
+
+	
+	if (max_value == A.m_data[0][0])
+	{
+		q.m_data[0] = 0.5 * sqrt(1 + 2 * A.m_data[0][0] - trace_A);
+		q.m_data[1] = (A.m_data[0][1] + A.m_data[1][0]) / 4 / q.m_data[0];
+		q.m_data[2] = (A.m_data[0][2] + A.m_data[2][0]) / 4 / q.m_data[0];
+		q.m_data[3] = (A.m_data[1][2] - A.m_data[2][1]) / 4 / q.m_data[0];
+	}
+	
+	else if (max_value == A.m_data[1][1])
+	{
+		q.m_data[1] = 0.5 * sqrt(1 + 2 * A.m_data[1][1] - trace_A);
+		q.m_data[0] = (A.m_data[0][1] + A.m_data[1][0]) / 4 / q.m_data[1];
+		q.m_data[2] = (A.m_data[1][2] + A.m_data[2][1]) / 4 / q.m_data[1];
+		q.m_data[3] = (A.m_data[2][0] - A.m_data[0][2]) / 4 / q.m_data[1];
+	}
+	else if (max_value == A.m_data[2][2])
+	{
+		q.m_data[2] = 0.5 * sqrt(1 + 2 * A.m_data[2][2] - trace_A);
+		q.m_data[0] = (A.m_data[2][0] + A.m_data[0][2]) / 4 / q.m_data[2];
+		q.m_data[1] = (A.m_data[1][2] + A.m_data[2][1]) / 4 / q.m_data[2];
+		q.m_data[3] = (A.m_data[0][1] - A.m_data[1][0]) / 4 / q.m_data[2];
+	}
+
+	else if (max_value == trace_A)
+	{
+		q.m_data[3] = 0.5 * sqrt(1 + trace(A));
+		q.m_data[0] = (A.m_data[1][2] - A.m_data[2][1]) / 4 / q.m_data[3];
+		q.m_data[1] = (A.m_data[2][0] - A.m_data[0][2]) / 4 / q.m_data[3];
+		q.m_data[2] = (A.m_data[0][1] - A.m_data[1][0]) / 4 / q.m_data[3];
+	}
+
+	//q = q' ????? 
+	return q;
+}
+
+void quicksort(double table[], int left, int right)
+{
+	double v = table[(left + right) / 2];
+	int i, j;
+	double x;
+	i = left;
+	j = right;
+	do {
+		while (table[i] < v) i++;
+		while (table[j] > v) j--;
+		if (i <= j) {
+			x = table[i];
+			table[i] = table[j];
+			table[j] = x;
+			i++; 
+			j--;
+		}
+	} while (i <= j);
+	if (j > left) quicksort(table, left, j);
+	if (i< right) quicksort(table, i, right);
+}
+
 
 
 
