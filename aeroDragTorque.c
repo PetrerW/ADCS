@@ -65,6 +65,7 @@ double aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, double face
 		double cd = 2.2; // drag coeff
 
 		double aero_torque = 0;
+		int face_s_legth = 6;
 
 
 		//GO ON HERE
