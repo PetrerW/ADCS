@@ -1,5 +1,6 @@
 #include "Mathematics.h"
 #include <stdio.h>
+#include <math.h>
 #define SINGLE_NUMBER 0
 
 matrix3x3 skew3x1(matrix3x1 w)
@@ -167,7 +168,7 @@ matrix4x1 m2q(matrix3x3 A) //% Extract quaternion from attitude matrix
 
 	else if (max_value == trace_A)
 	{
-		q.m_data[3] = 0.5 * sqrt(1 + trace(A));
+		q.m_data[3] = 0.5 * sqrt(1 + trace_A);
 		q.m_data[0] = (A.m_data[1][2] - A.m_data[2][1]) / 4 / q.m_data[3];
 		q.m_data[1] = (A.m_data[2][0] - A.m_data[0][2]) / 4 / q.m_data[3];
 		q.m_data[2] = (A.m_data[0][1] - A.m_data[1][0]) / 4 / q.m_data[3];
