@@ -1,10 +1,11 @@
 #include "Mathematics.h"
 #include <stdio.h>
 #include <math.h>
+#include "FaceDiv.h"
 //ECI - Earth Centered Inertial
-double aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, double face, double R_z) //I don't know global value R_z so i'll set this as parameter
+double aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, struct faceTag face, double R_z) //I don't know global value R_z so i'll set this as parameter
 {
-	int i;
+	int i, j;
 	double w_ez = 7.2921158553e-5; //[rad/s]
 	matrix1x3 w_e = { // earth rate vector in eci
 		{ 0, 0, w_ez }
@@ -67,12 +68,26 @@ double aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, double face
 		double aero_torque = 0;
 		int face_s_legth = 6;
 
+		int lenght_face_s = 6;
+		double cos[6], aero__torque[6];
+		matrix6x3 force;
+		for (i = 0; i < lenght_face_s; i++)
+		{
+			//cos[i]= face.v(:, i)' * vs_rel / vectorNorm(vs_rel);
+			cos[i] = face.v[0][0] * vs_rel.m_data[0] + face.v[1][0] * vs_rel.m_data[1] + face.v[2][0] * vs_rel.m_data[2];
+			cos[i] /= vectorNorm1x3(vs_rel);
+			//force_i = - 0.5 * ro * cd * vectorNorm(vs_rel) * vs_rel * face.s(i) * max(cos_i, 0) * 1e6; % [N]
+			for (j = 0; j < 3; j++) 
+			{
+				force.m_data[j][i] = -0.5*ro*cd*vectorNorm(vs_rel)*face.s[i] * max(cos[i], 0) * 1e6 * vs_rel.m_data[j];
+			}
+			//GO ON HERE
+			//GO ON HERE
+			//GO ON HERE
+			//GO ON HERE
+			//GO ON HERE
+		}
 
-		//GO ON HERE
-		//GO ON HERE
-		//GO ON HERE
-		//GO ON HERE
-		//GO ON HERE
 
 		return 0.0;
 }
