@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #define SINGLE_NUMBER 0
+#define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
 matrix3x3 skew3x1(matrix3x1 w)
 {
@@ -206,8 +207,21 @@ double max(double arg1, double arg2)
 		return arg1;
 	else if (arg1 < arg2)
 		return arg2;
+	else
+		return 0;
 }
 
+matrix1x3 q2euler(matrix4x1 Q)
+{
+	double pitch = asin(-2 * (Q.m_data[0] * Q.m_data[2] - Q.m_data[3] * Q.m_data[1])) * 180 / PI;
+	double yaw = atan2(2 * (Q.m_data[0] * Q.m_data[1] + Q.m_data[3] * Q.m_data[2]), Q.m_data[0] * Q.m_data[0] - Q.m_data[1] * Q.m_data[1] - Q.m_data[2] * Q.m_data[2] + Q.m_data[3] * Q.m_data[3]) * 180 / PI;
+	double roll = atan2(2 * (Q.m_data[1] * Q.m_data[2] + Q.m_data[0] * Q.m_data[3]), -Q.m_data[0] * Q.m_data[0] - Q.m_data[1] * Q.m_data[1] + Q.m_data[2] * Q.m_data[2] + Q.m_data[3] * Q.m_data[3]) * 180 / PI;
 
+	matrix1x3 euler;
+	euler.m_data[0] = pitch;
+	euler.m_data[1] = yaw;
+	euler.m_data[2] = roll;
 
+	return euler;
 
+}
