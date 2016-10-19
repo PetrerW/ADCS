@@ -74,7 +74,6 @@ matrix1x3 aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, struct f
 	int lenght_face_s = 6;
 	double cos[6]; //aero_torque[6];
 
-	matrix1x3 cp_column[6];
 	for (i = 0; i < lenght_face_s; i++)
 	{
 		//cos[i]= face.v(:, i)' * vs_rel / vectorNorm(vs_rel);
@@ -85,7 +84,7 @@ matrix1x3 aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, struct f
 		matrix1x3 cp_column;
 		for (j = 0; j < 3; j++)
 		{
-			force.m_data[j] = -0.5*ro*cd*vectorNorm(vs_rel)*face.s[i] * max(cos[i], 0) * 1e6 * vs_rel.m_data[j];
+			force.m_data[j] = -0.5*ro*cd*vectorNorm1x3(vs_rel)*face.s[i] * max(cos[i], 0) * 1e6 * vs_rel.m_data[j];
 
 			cp_column.m_data[j] = face.cp[j][i];
 		}
@@ -101,7 +100,6 @@ matrix1x3 aeroDragTorque(matrix1x3 r_eci, matrix1x3 v_eci, matrix4x1 q, struct f
 		for (j = 0; j < 3; j++)
 			aero_torque.m_data[j] += aero_torque_component[i].m_data[j];
 	}
-
 
 	return aero_torque;
 }
