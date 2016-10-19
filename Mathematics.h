@@ -34,5 +34,5 @@ double vectorNorm1x3(matrix1x3 _r);
 matrix3x3 q2m(matrix4x1 Q);
 matrix4x1 m2q(matrix3x3 A);
 void quicksort(double table[], int left, int right);
-
+double max(double arg1, double arg2);
 
