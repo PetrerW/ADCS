@@ -44,7 +44,7 @@ matrix3x3 skew1x3(matrix1x3 w) //Similar with skew(matrix3x1 w) funciton, becaus
 
 double vectorNorm3x3(matrix3x3 _r)  //Mocked it - Pablo has wrtitten the function
 {
-	return 1;
+	return 1.0;
 }
 
 double vectorNorm4x1(matrix4x1 _r) //Mocked it - Pablo has wrtitten the function
@@ -54,12 +54,12 @@ double vectorNorm4x1(matrix4x1 _r) //Mocked it - Pablo has wrtitten the function
 
 double vectorNorm3x1(matrix3x1 _r) //Mocked it - Pablo has wrtitten the function
 {
-	return 0.0;
+	return sqrt(_r.m_data[0]*_r.m_data[0] + _r.m_data[1]*_r.m_data[1] + _r.m_data[2]*_r.m_data[2]);
 }
 
 double vectorNorm1x3(matrix1x3 _r) //Mocked it - Pablo has wrtitten the function
 {
-	return 0.0;
+	return sqrt(_r.m_data[0]*_r.m_data[0] + _r.m_data[1]*_r.m_data[1] + _r.m_data[2]*_r.m_data[2]);
 }
 
 matrix3x3 q2m(matrix4x1 Q)
@@ -198,6 +198,14 @@ void quicksort(double table[], int left, int right)
 	} while (i <= j);
 	if (j > left) quicksort(table, left, j);
 	if (i< right) quicksort(table, i, right);
+}
+
+double max(double arg1, double arg2)
+{
+	if (arg1 >= arg2)
+		return arg1;
+	else if (arg1 < arg2)
+		return arg2;
 }
 
 
