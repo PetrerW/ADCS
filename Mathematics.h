@@ -19,6 +19,10 @@ typedef struct matrix6x3Tag {
 	double m_data[3][6]; //6 columns, 3 rows
 }matrix6x3;
 
+typedef struct matrix2x1Tag {
+	double m_data[2]; //2 columns
+}matrix2x1;
+
 //3x1 : [1 2 3] three columns, one row
 //1x3:  [1] one column, three rows
 //		[2]
@@ -35,4 +39,4 @@ matrix3x3 q2m(matrix4x1 Q);
 matrix4x1 m2q(matrix3x3 A);
 void quicksort(double table[], int left, int right);
 double max(double arg1, double arg2);
-
+matrix1x3 q2euler(matrix4x1 Q); //Calculating Euler angles[deg] from quaternion[q1 q2 q3 q0]'
